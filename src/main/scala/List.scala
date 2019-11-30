@@ -67,11 +67,6 @@ object List {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    def l = List.build(Array(1, 2, 3, 4))
-    println(init(l))
-  }
-
   def init2[A](l: List[A]): List[A] = {
     import collection.mutable.ListBuffer
     val buf = new ListBuffer[A]
@@ -83,5 +78,23 @@ object List {
     }
     go(l)
   }
+
+  def sum2(ns: List[Int]) = Ch3.foldRight(ns, 0)(_ + _)
+
+  def product2(ns: List[Double]) = Ch3.foldRight(ns, 1.0)(_ * _)
+
+  def buildWithFold() = Ch3.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_))
+
+  def length[A](as: List[A]): Int = Ch3.foldRight(as, 0)((_, c) => c + 1)
+
+  def sum3(ns: List[Int]) = Ch3.foldLeft(ns, 0)(_ + _)
+
+  def product3(ns: List[Double]) = Ch3.foldLeft(ns, 1.0)(_ * _)
+
+  def length2[A](as: List[A]): Int = Ch3.foldLeft(as, 0)((c, _) => c + 1)
+
+  def reverse[A](as : List[A]): List[A] = Ch3.foldLeft(as, List[A]())((acc, h) => Cons(h, acc))
+
+  def append[A](l : List[A], r : List[A]) : List[A] = Ch3.foldRight(l, r)(Cons(_, _))
 }
 
