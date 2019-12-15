@@ -93,8 +93,34 @@ object List {
 
   def length2[A](as: List[A]): Int = Ch3.foldLeft(as, 0)((c, _) => c + 1)
 
+  def concat[A](l: List[List[A]]): List[A] = Ch3.foldRight(l, Nil:List[A])(append)
+
   def reverse[A](as : List[A]): List[A] = Ch3.foldLeft(as, List[A]())((acc, h) => Cons(h, acc))
 
   def append[A](l : List[A], r : List[A]) : List[A] = Ch3.foldRight(l, r)(Cons(_, _))
+
+  def add1(l: List[Int]): List[Int] = Ch3.foldRight(l, Nil:List[Int])((a, b) => Cons(a + 1, b))
+
+  def double2String(l: List[Double]): List[String] = Ch3.foldRight(l, Nil:List[String])((a, b) => Cons(a.toString, b))
+
+  def map[A,B](as: List[A])(f: A => B): List[B] = Ch3.foldRight(as, Nil:List[B])((a, b) => Cons(f(a), b))
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = Ch3.foldRight(as, Nil:List[A])((a, b) => if (f(a)) Cons(a, b) else b)
+
+  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] = concat(map(as)(f))
+
+  def flatMap_2[A,B](as: List[A])(f: A => List[B]): List[B] =
+    Ch3.foldRight(as, Nil:List[B])((h:A,t:List[B]) => append(f(h), t))
+
+  def flatMap_3[A,B](as: List[A])(f: A => List[B]): List[B] = {
+    val buf = new collection.mutable.ListBuffer[B]
+    def go(l: List[A]): Unit = l match {
+      case Nil => ()
+      case Cons(h,t) => map(f(h))(buf.+=); go(t)
+    }
+    go(as)
+    List(buf.toList: _*) // converting from the standard Scala list to the list we've defined here
+  }
+
 }
 
